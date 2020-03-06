@@ -1,0 +1,28 @@
+def make_docker_image(name:str, image_name:str=None, tag:str=None, dockerfile:str='Dockerfile', srcs:list=[], deps:list=[]):
+    docker_repository = check_config(key='DOCKER_REPOSITORY', example='hub.docker.com/myorg')
+
+    docker_context = tarball(
+        name = f'_{name}#context',
+        srcs = srcs + [dockerfile],
+        out = f'{name}-context.tar.gz'
+    )
+
+    if not image_name:
+        image_name = package_name().replace('.', '').replace('/', '.')
+    if not tag:
+        tag = f'\\\$(cat $(out_location {docker_context}) | shasum | cut -d " " -f1)'
+
+    return sh_cmd(
+        name = name,
+        cmd = '\n'.join([
+            f'set -e',
+
+            f'DOCKER_REPOSITORY=\\\${{DOCKER_REPOSITORY:-{docker_repository}/{image_name}}}',
+            f'DOCKER_TAG=\\\${{DOCKER_TAG:-{tag}}}',
+
+            f'docker build -t \\\$DOCKER_REPOSITORY:\\\$DOCKER_TAG -f {dockerfile} - < $(out_location {docker_context})',
+
+            f'[ ! -z \\\$DOCKER_PUSH ] && docker push \\\$DOCKER_REPOSITORY:\\\$DOCKER_TAG'
+        ]),
+        deps = deps + [docker_context]
+    )

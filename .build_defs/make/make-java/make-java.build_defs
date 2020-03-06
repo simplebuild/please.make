@@ -1,0 +1,11 @@
+def make_java_library(name:str, srcs:list=[], resources:list=None, deps:list=[]):
+    return java_library(name=name, srcs=srcs, resources=resources, deps=deps)
+
+def make_java_binary(name:str, main_class:str, srcs:list=[], deps:list=[]):
+    return java_binary(name=name, main_class=main_class, srcs=srcs, deps=deps)
+
+def make_java_test(name:str, srcs:list=[], deps:list=[]):
+    return java_test(name=name, srcs=srcs, deps=deps)
+
+def make_maven_jar(name:str, id:str, deps:list=[]):
+    return maven_jar(name=name, id=id, deps=deps)
