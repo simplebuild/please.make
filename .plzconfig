@@ -1,0 +1,10 @@
+[please]
+version = 14.1.3
+
+[buildconfig]
+go-vendor-deps = //example_go:vendor
+python-vendor-deps = //example_python:vendor
+web-vendor-deps = //example_web:vendor
+web-toolchain = //example_web/toolchain:default
+
+docker-repository = pleasemake

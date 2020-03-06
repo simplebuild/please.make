@@ -1,0 +1,126 @@
+def make_python_vendor(name:str='vendor'):
+    build_rule(
+        name = name + '-venv',
+        cmd = '\n'.join([
+            'cat > $OUT <<EOF',
+            '#!/bin/sh\n',
+
+            'set -e\n',
+
+            # prepare env
+            'export WORKSPACE=\\\$(git rev-parse --show-toplevel)',
+            'export PYTHON_ROOT=\\\$WORKSPACE/$PKG',
+            'export VENV=\\\$PYTHON_ROOT/venv',
+            'export LOCKFILE=\\\$PYTHON_ROOT/.pip3-install.lock',
+            'export LOCKFILE_PID=\\\$LOCKFILE.\\\$\\\$',
+
+            # in a subshell
+            '(',
+
+                # acquire the lock (the trick is that hard link creation is atomic)
+                'trap "rm -f \\\$LOCKFILE \\\$LOCKFILE_PID" EXIT',
+                'echo \\\$\\\$ > \\\$LOCKFILE_PID',
+                'while ! ln \\\$LOCKFILE_PID \\\$LOCKFILE 2> /dev/null; do printf .; sleep 0.2; done;',
+
+                # install venv and requirements.txt
+                '[ -d \\\$VENV ] || (echo "Installing venv..." && $TOOLS_VIRTUALENV \\\$VENV > /dev/null)',
+                'HOME=$(eval echo ~$(whoami)) \\\$VENV/bin/pip3 install ${PIP3_CACHE_FOLDER:+ --cache-dir $PIP3_CACHE_FOLDER} -q -r \\\$PYTHON_ROOT/requirements.txt',
+                '\\\$VENV/bin/pip3 freeze > \\\$PYTHON_ROOT/requirements.txt',
+
+            ')',
+
+            '\nEOF',
+        ]),
+        tools = {
+            'virtualenv': ['virtualenv']
+        },
+        outs = ['venv.sh'],
+        pass_env = ['PIP3_CACHE_FOLDER']
+    )
+
+    return filegroup(
+        name = name,
+        srcs = ['requirements.txt']
+    )
+
+def make_python_library(name:str, srcs:list, resources:list=[], deps:list=[]):
+    return filegroup(
+        name = name,
+        srcs = srcs + resources,
+        deps = deps,
+    )
+
+def make_python_app(name:str, srcs:list, resources:list=[], deps:list=[]):
+    vendor_deps = check_config(key='PYTHON_VENDOR_DEPS', example='//example_python:vendor')
+    python_root, _ = decompose(vendor_deps)
+
+    return build_rule(
+        name = name,
+        srcs = srcs + resources,
+        cmd = f'mkdir -p $OUT && mv {python_root} $OUT',
+        outs = ['dist'],
+        deps = deps + [vendor_deps],
+        needs_transitive_deps = True,
+        provides = {
+            'library': make_python_library(name=f'_{name}#library', srcs=srcs, resources=resources, deps=deps)
+        }
+    )
+
+def make_python_app_runner(name:str, app:str, main:str, deps:list=[]):
+    vendor_deps = check_config(key='PYTHON_VENDOR_DEPS', example='//example_python:vendor')
+    python_root, _ = decompose(vendor_deps)
+    venv = vendor_deps + '-venv'
+
+    return sh_cmd(
+        name = name,
+        cmd = ' && '.join([
+            f'source $(out_location {venv})',
+            f'PYTHONPATH=$(out_location {app}) \\\$VENV/bin/python3 $(out_location {app})/$PKG/{main} "\\\$@"'
+        ]),
+        deps = deps + [app, venv],
+    )
+
+def make_python_test(name:str, srcs:list, resources:list=[], deps:list=[]):
+    vendor_deps = check_config(key='PYTHON_VENDOR_DEPS', example='//example_python:vendor')
+    python_root, _ = decompose(vendor_deps)
+    venv = vendor_deps + '-venv'
+
+    return build_rule(
+        name = name,
+        srcs = {
+            'test_files': srcs,
+            'resources': resources
+        },
+        test_cmd = ' && '.join([
+            'cd $TEST',
+            'source .test_env',
+            '$VENV/bin/python3 -m xmlrunner $TEST_FILES --output-file $RESULTS_FILE'
+        ]),
+        cmd = ' && '.join([
+            f'mkdir -p $OUTS && mv {python_root} $OUTS/',
+            f'cat $OUTS/$(location {venv}) >> $OUTS/.test_env',
+            'echo "export TEST_FILES=\\"$SRCS_TEST_FILES\\"" >> $OUTS/.test_env'
+        ]),
+        outs = [f'{name}.testpack'],
+        deps = deps + [venv, vendor_deps],
+        needs_transitive_deps = True,
+        requires = ['library'],
+        test = True
+    )
+
+def make_python_proto(name:str, srcs:list=[], grpc:bool=False, deps:list=[]):
+    vendor_deps = check_config(key='PYTHON_VENDOR_DEPS', example='//example_python:vendor')
+    python_root, _ = decompose(vendor_deps)
+    venv = vendor_deps + '-venv'
+
+    protoc_flags = ' '.join(['-I.', '--python_out=.'] + (['--grpc_python_out=.'] if grpc else []))
+
+    return sh_cmd(
+        name = name,
+        srcs = srcs,
+        cmd = ' && '.join([
+            f'source $(out_location {venv})',
+            f'\\\$VENV/bin/python3 -m grpc_tools.protoc {protoc_flags} $SRCS'
+        ]),
+        deps = deps + [venv],
+    )

@@ -1,0 +1,7 @@
+.plz_clean_*
+.plz-cache
+plz-out
+node_modules
+venv
+.idea
+.vscode

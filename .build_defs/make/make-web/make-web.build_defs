@@ -1,0 +1,134 @@
+def system_make_yarn(name:str, version:str):
+    return remote_file(
+        name = name,
+        url = f'https://github.com/yarnpkg/yarn/releases/download/v{version}/yarn-{version}.js'
+    )
+
+def make_web_vendor(name:str='vendor'):
+    return filegroup(
+        name = name,
+        srcs = glob(['*.js','*.ts','*.json','*.lock'], hidden=True),
+    )
+
+def make_web_toolchain(name:str, srcs:list=[], deps:list=[]):
+    return filegroup(
+        name = name,
+        srcs = srcs,
+        deps = deps
+    )
+
+def make_web_component(name:str, srcs:list=[], deps:list=[]):
+    return filegroup(
+        name = name,
+        srcs = srcs,
+        deps = deps
+    )
+
+def make_web_app_devserver(name:str, app:str):
+    vendor_deps = check_config(key='WEB_VENDOR_DEPS', example='//example_web:vendor')
+    toolchain = check_config(key='WEB_TOOLCHAIN', example='//example_web/toolchain:default')
+    web_root, _ = decompose(vendor_deps)
+    app_pkg, _ = decompose(app)
+
+    return sh_cmd(
+        name = name,
+        cmd = f'cd {web_root} && node $(echo $(location {toolchain}) | sed s/{web_root}\\\///)/scripts/start.js $(echo {app_pkg} | sed s/{web_root}\\\///)',
+        deps = [app, toolchain]
+    )
+
+def make_web_app(name:str, srcs:list, deps:list=[]):
+    vendor_deps = check_config(key='WEB_VENDOR_DEPS', example='//example_web:vendor')
+    toolchain = check_config(key='WEB_TOOLCHAIN', example='//example_web/toolchain:default')
+    web_root, _ = decompose(vendor_deps)
+
+    return build_rule(
+        name = name,
+        building_description = 'Compiling...',
+        srcs = srcs,
+        cmd = ' && '.join([
+            # global env
+            f'export WORKSPACE=$(git rev-parse --show-toplevel)',
+            f'export WORKSPACE_WEB_ROOT=$WORKSPACE/{web_root}',
+
+            # paths relative to web root
+            f'export WEB_ROOT={web_root}',
+            f'export WEB_ROOT_TOOLCHAIN_BUILD=$(echo $(location {toolchain}) | sed s/$WEB_ROOT\\\///)/scripts/build.js',
+            f'export WEB_ROOT_PKG=$(echo $PKG | sed s/$WEB_ROOT\\\///)',
+
+            # yarn install into workspace
+            f'pushd $WORKSPACE_WEB_ROOT',
+            f'HOME=$(eval echo ~$(whoami)) $TOOLS_NODE $TOOLS_YARN install --check-files --mutex network',
+            f'popd',
+
+            # link node_modules and compile
+            f'pushd $WEB_ROOT',
+            f'ln -s $WORKSPACE_WEB_ROOT/node_modules node_modules',
+            f'$TOOLS_NODE $WEB_ROOT_TOOLCHAIN_BUILD $WEB_ROOT_PKG',
+            f'popd',
+
+            # output
+            f'mv $PKG/dist $OUTS',
+        ]),
+        tools = {
+            'yarn': ['//.build_defs/make/make-web:yarn'],
+            'node': ['node']
+        },
+        pass_env = ['YARN_CACHE_FOLDER'],
+        outs = ['dist'],
+        deps = deps + [toolchain, vendor_deps],
+        needs_transitive_deps = True,
+        provides = {
+            'component': make_web_component(name=f'_{name}#component', srcs=srcs, deps=deps)
+        }
+    )
+
+def make_web_test(name:str, srcs:list, deps:list=[]):
+    vendor_deps = check_config(key='WEB_VENDOR_DEPS', example='//example_web:vendor')
+    toolchain = check_config(key='WEB_TOOLCHAIN', example='//example_web/toolchain:default')
+    web_root, _ = decompose(vendor_deps)
+
+    return build_rule(
+        name = name,
+        srcs = srcs,
+        test_cmd = ' && '.join([
+            f'source $TEST/.test_env',
+
+            # global env
+            f'export WORKSPACE=$(git rev-parse --show-toplevel)',
+            f'export WORKSPACE_WEB_ROOT=$WORKSPACE/{web_root}',
+
+            # paths relative to web root
+            f'export WEB_ROOT={web_root}',
+            f'export WEB_ROOT_TOOLCHAIN_TEST=$(echo $(location {toolchain}) | sed s/$WEB_ROOT\\\///)/scripts/test.js',
+            f'export WEB_ROOT_PKG=$(echo $PKG | sed s/$WEB_ROOT\\\///)',
+
+            # yarn install into workspace
+            f'pushd $WORKSPACE_WEB_ROOT',
+            f'HOME=$(eval echo ~$(whoami)) $TOOLS_NODE $TOOLS_YARN install --check-files --mutex network',
+            f'popd',
+
+            # link node_modules and test
+            f'pushd $TEST/$WEB_ROOT',
+            f'ln -s $WORKSPACE_WEB_ROOT/node_modules node_modules',
+            f'$TOOLS_NODE $WEB_ROOT_TOOLCHAIN_TEST $WEB_ROOT_PKG',
+            f'popd',
+
+            # output
+            f'mv $TEST/$WEB_ROOT/junit.xml $RESULTS_FILE',
+        ]),
+        cmd = ' && '.join([
+            f'mkdir -p $OUTS && mv {web_root} $OUTS/',
+            f'echo "export TOOLS_YARN=$TOOLS_YARN" >> $OUTS/.test_env',
+            f'echo "export TOOLS_NODE=$TOOLS_NODE" >> $OUTS/.test_env',
+        ]),
+        requires = ['component'],
+        tools = {
+            'yarn': ['//.build_defs/make/make-web:yarn'],
+            'node': ['node']
+        },
+        pass_env = ['YARN_CACHE_FOLDER'],
+        outs = [f'{name}.testpack'],
+        deps = deps + [toolchain, vendor_deps],
+        needs_transitive_deps = True,
+        test = True
+    )
