@@ -6,12 +6,12 @@ on:
   pull_request:
     branches: [ master ]
 
-env:
-  PLZ_OVERRIDES: cache.dir:${{ env.HOME }}/.cache/please
-  GOCACHE: ${{ env.HOME }}/.cache/gocache
-  GOPATH: ${{ env.HOME }}/.cache/gopath
-  YARN_CACHE_FOLDER: ${{ env.HOME }}/.cache/yarn
-  PIP3_CACHE_FOLDER: ${{ env.HOME }}/.cache/pip3
+# env:
+#   PLZ_OVERRIDES: cache.dir:${{ env.HOME }}/.cache/please
+#   GOCACHE: ${{ env.HOME }}/.cache/gocache
+#   GOPATH: ${{ env.HOME }}/.cache/gopath
+#   YARN_CACHE_FOLDER: ${{ env.HOME }}/.cache/yarn
+#   PIP3_CACHE_FOLDER: ${{ env.HOME }}/.cache/pip3
 
 jobs:
   build:
@@ -23,13 +23,5 @@ jobs:
     - name: Echo pwd
       run: pwd
     
-    - name: Echo $GITHUB_WORKSPACE
-      run: echo GITHUB_WORKSPACE $GITHUB_WORKSPACE
-
-    - name: Echo env variables
-      run: |
-        echo PLZ_OVERRIDES: $PLZ_OVERRIDES
-        echo GOCACHE: $GOCACHE
-        echo GOPATH: $GOPATH
-        echo YARN_CACHE_FOLDER: $YARN_CACHE_FOLDER
-        echo PIP3_CACHE_FOLDER: $PIP3_CACHE_FOLDER
+    - name: Echo env
+      run: env
