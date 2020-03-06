@@ -1,0 +1,2 @@
+# please.make
+Monorepo boilerplate
