@@ -7,11 +7,11 @@ on:
     branches: [ master ]
 
 env:
-  PLZ_OVERRIDES: cache.dir:$GITHUB_WORKSPACE/.cache/please
-  GOCACHE: $GITHUB_WORKSPACE/.cache/gocache
-  GOPATH: $GITHUB_WORKSPACE/.cache/gopath
-  YARN_CACHE_FOLDER: $GITHUB_WORKSPACE/.cache/yarn
-  PIP3_CACHE_FOLDER: $GITHUB_WORKSPACE/.cache/pip3
+  PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
+  GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
+  GOPATH: ${{ env.GITHUB_WORKSPACE }}/.cache/gopath
+  YARN_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/yarn
+  PIP3_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/pip3
 
 jobs:
   build:
