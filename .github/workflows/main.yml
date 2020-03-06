@@ -6,12 +6,12 @@ on:
   pull_request:
     branches: [ master ]
 
-env:
-  PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
-  GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
-  GOPATH: ${{ env.GITHUB_WORKSPACE }}/.cache/gopath
-  YARN_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/yarn
-  PIP3_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/pip3
+# env:
+#   PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
+#   GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
+#   GOPATH: ${{ env.GITHUB_WORKSPACE }}/.cache/gopath
+#   YARN_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/yarn
+#   PIP3_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/pip3
 
 jobs:
   build:
@@ -19,11 +19,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Echo pwd
+      run: pwd
 
-    - name: Echo env variables
-      run: |
-        echo PLZ_OVERRIDES: $PLZ_OVERRIDES
-        echo GOCACHE: $GOCACHE
-        echo GOPATH: $GOPATH
-        echo YARN_CACHE_FOLDER: $YARN_CACHE_FOLDER
-        echo PIP3_CACHE_FOLDER: $PIP3_CACHE_FOLDER
+#     - name: Echo env variables
+#       run: |
+#         echo PLZ_OVERRIDES: $PLZ_OVERRIDES
+#         echo GOCACHE: $GOCACHE
+#         echo GOPATH: $GOPATH
+#         echo YARN_CACHE_FOLDER: $YARN_CACHE_FOLDER
+#         echo PIP3_CACHE_FOLDER: $PIP3_CACHE_FOLDER
