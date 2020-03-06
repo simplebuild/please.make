@@ -15,9 +15,9 @@ jobs:
 
       - name: build
         run: ./pleasew build //...
-        env:
-          PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
-          GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
-          GOPATH: ${{ env.GITHUB_WORKSPACE }}/.cache/gopath
-          YARN_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/yarn
-          PIP3_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/pip3
+        # env:
+        #   PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
+        #   GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
+        #   GOPATH: ${{ env.GITHUB_WORKSPACE }}/.cache/gopath
+        #   YARN_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/yarn
+        #   PIP3_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/pip3
