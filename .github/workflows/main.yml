@@ -6,22 +6,18 @@ on:
   pull_request:
     branches: [ master ]
 
-# env:
-#   PLZ_OVERRIDES: cache.dir:${{ env.HOME }}/.cache/please
-#   GOCACHE: ${{ env.HOME }}/.cache/gocache
-#   GOPATH: ${{ env.HOME }}/.cache/gopath
-#   YARN_CACHE_FOLDER: ${{ env.HOME }}/.cache/yarn
-#   PIP3_CACHE_FOLDER: ${{ env.HOME }}/.cache/pip3
-
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: pleasemake/ci:1.0
 
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Echo pwd
-      run: pwd
-    
-    - name: Echo env
-      run: env
+      - uses: actions/checkout@v2
+
+      - name: build
+        run: ./pleasew build //...
+        env:
+          PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
+          GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
+          GOPATH: ${{ env.GITHUB_WORKSPACE }}/.cache/gopath
+          YARN_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/yarn
+          PIP3_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/pip3
