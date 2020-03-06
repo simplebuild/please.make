@@ -13,7 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: build
+      - name: Install virtualenv
+        run: |
+          pip3 install virtualenv
+
+      - name: Build
         run: ./pleasew build //...
         # env:
         #   PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
