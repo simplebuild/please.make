@@ -15,7 +15,8 @@ jobs:
 
       - name: Install virtualenv
         run: |
-          pip3 install setuptools virtualenv
+          pip3 install setuptools
+          pip3 install virtualenv
 
       - name: Build
         run: ./pleasew build //...
