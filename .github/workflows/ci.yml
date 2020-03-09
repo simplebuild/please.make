@@ -20,8 +20,6 @@ jobs:
           echo "::set-env name=YARN_CACHE_FOLDER::$HOME/.cache/yarn"
           echo "::set-env name=PIP3_CACHE_FOLDER::$HOME/.cache/pip3"
 
-      - run: env
-
       # Using default versions of Java, Go and Node, override if needed
       # - uses: actions/setup-java@v1.3.0
       # - uses: actions/setup-go@v1.0.0
@@ -31,12 +29,12 @@ jobs:
         with:
           python-version: '^3.7.0'
 
-      # - name: Setup virtualenv
-      #   run: |
-      #     pip3 install --upgrade pip
-      #     pip3 install setuptools
-      #     pip3 install virtualenv
-      #     sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
+      - name: Setup virtualenv
+        run: |
+          pip3 install --upgrade pip
+          pip3 install setuptools
+          pip3 install virtualenv
+          sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
 
       #   uses: actions/cache@v1
       #   with:
@@ -47,11 +45,11 @@ jobs:
       #       ${{ runner.os }}-build-
       #       ${{ runner.os }}-
 
-      # - name: Build
-      #   run: ./pleasew build //...
+      - name: Build
+        run: ./pleasew build //...
 
-      # - name: Test
-      #   run: ./pleasew test //...
+      - name: Test
+        run: ./pleasew test //...
 
-      # - name: Debug
-      #   run: ls -alh ~/.cache
+      - name: Debug
+        run: ls -alh ~/.cache
