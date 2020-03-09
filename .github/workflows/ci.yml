@@ -7,37 +7,48 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+
+    env:
+      PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
+      GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
+      GOPATH: ${{ env.GITHUB_WORKSPACE }}/.cache/gopath
+      YARN_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/yarn
+      PIP3_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/pip3
 
     steps:
       - uses: actions/checkout@v2
+
+      - run: env
 
       # Using default versions of Java, Go and Node, override if needed
       # - uses: actions/setup-java@v1.3.0
       # - uses: actions/setup-go@v1.0.0
       # - uses: actions/setup-node@v1.1.0
 
-      - uses: actions/setup-python@v1
-        with:
-          python-version: '^3.7'
+      # - uses: actions/setup-python@v1
+      #   with:
+      #     python-version: '^3.7.0'
 
-      - name: Setup virtualenv
-        run: |
-          pip3 install --upgrade pip
-          pip3 install setuptools
-          pip3 install virtualenv
-          sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
+      # - name: Setup virtualenv
+      #   run: |
+      #     pip3 install --upgrade pip
+      #     pip3 install setuptools
+      #     pip3 install virtualenv
+      #     sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
 
-      - name: Build
-        run: ./pleasew build //...
-      
-      - name: Test
-        run: ./pleasew test //...
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-build-${{ env.cache-name }}-
+      #       ${{ runner.os }}-build-
+      #       ${{ runner.os }}-
 
-        # env:
-        #   PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
-        #   GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
-        #   GOPATH: ${{ env.GITHUB_WORKSPACE }}/.cache/gopath
-        #   YARN_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/yarn
-        #   PIP3_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/pip3
+      # - name: Build
+      #   run: ./pleasew build //...
+
+      # - name: Test
+      #   run: ./pleasew test //...
