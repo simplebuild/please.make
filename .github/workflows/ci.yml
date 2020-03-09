@@ -12,22 +12,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v1.3.0
+      - uses: actions/setup-go@v1.0.0
+      - uses: actions/setup-node@v1.1.0
       - uses: actions/setup-python@v1
         with:
-          python-version: '3.7'
+          python-version: '>= 3.7'
 
-      - name: Dump env
-        run: env
-
-      - name: Install virtualenv
+      - name: Setup virtualenv
         run: |
+          pip3 install --upgrade pip
           pip3 install setuptools
           pip3 install virtualenv
-          pip3 show -f virtualenv
           sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
 
       - name: Build
         run: ./pleasew build //...
+      
+      - name: Test
+        run: ./pleasew test //...
+
         # env:
         #   PLZ_OVERRIDES: cache.dir:${{ env.GITHUB_WORKSPACE }}/.cache/please
         #   GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
