@@ -13,21 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-java@v1.3.0
-        with:
-          java-version: '^1.8'
+      # Using default versions of Java, Go and Node, override if needed
+      # - uses: actions/setup-java@v1.3.0
+      # - uses: actions/setup-go@v1.0.0
+      # - uses: actions/setup-node@v1.1.0
 
-      - uses: actions/setup-go@v1.0.0
-        with:
-          go-version: '^1.13'
-
-      - uses: actions/setup-node@v1.1.0
-        with:
-          node-version: '^12.16.1'
-
-      - uses: actions/setup-python@v1
-        with:
-          python-version: '^3.7'
+      # - uses: actions/setup-python@v1
+      #   with:
+      #     python-version: '^3.7'
 
       - name: Setup virtualenv
         run: |
