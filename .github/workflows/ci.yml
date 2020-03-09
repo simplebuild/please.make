@@ -36,7 +36,7 @@ jobs:
           pip3 install virtualenv
           sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
 
-        uses: actions/cache@v1
+      - uses: actions/cache@v1
         with:
           path: ~/.cache
           key: ${{ runner.os }}-all
