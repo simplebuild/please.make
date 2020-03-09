@@ -27,16 +27,16 @@ jobs:
       # - uses: actions/setup-go@v1.0.0
       # - uses: actions/setup-node@v1.1.0
 
-      # - uses: actions/setup-python@v1
-      #   with:
-      #     python-version: '^3.7.0'
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '^3.7.0'
 
-      # - name: Setup virtualenv
-      #   run: |
-      #     pip3 install --upgrade pip
-      #     pip3 install setuptools
-      #     pip3 install virtualenv
-      #     sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
+      - name: Setup virtualenv
+        run: |
+          pip3 install --upgrade pip
+          pip3 install setuptools
+          pip3 install virtualenv
+          sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
 
       #   uses: actions/cache@v1
       #   with:
@@ -47,8 +47,11 @@ jobs:
       #       ${{ runner.os }}-build-
       #       ${{ runner.os }}-
 
-      # - name: Build
-      #   run: ./pleasew build //...
+      - name: Build
+        run: ./pleasew build //...
 
-      # - name: Test
-      #   run: ./pleasew test //...
+      - name: Test
+        run: ./pleasew test //...
+
+      - name: Debug
+        run: ls -alh ~/.cache
