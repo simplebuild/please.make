@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PLZ_OVERRIDES: cache.dir\:${{ env.GITHUB_WORKSPACE }}/.cache/please
-      GOCACHE: ${{ env.GITHUB_WORKSPACE }}/.cache/gocache
-      GOPATH: ${{ env.GITHUB_WORKSPACE }}/.cache/gopath
-      YARN_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/yarn
-      PIP3_CACHE_FOLDER: ${{ env.GITHUB_WORKSPACE }}/.cache/pip3
+      PLZ_OVERRIDES: cache.dir:~/.cache/please
+      GOCACHE: ~/.cache/gocache
+      GOPATH: ~/.cache/gopath
+      YARN_CACHE_FOLDER: ~/.cache/yarn
+      PIP3_CACHE_FOLDER: ~/.cache/pip3
 
     steps:
       - uses: actions/checkout@v2
