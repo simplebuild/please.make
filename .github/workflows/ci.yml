@@ -10,15 +10,15 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    env:
-      PLZ_OVERRIDES: cache.dir:~/.cache/please
-      GOCACHE: ~/.cache/gocache
-      GOPATH: ~/.cache/gopath
-      YARN_CACHE_FOLDER: ~/.cache/yarn
-      PIP3_CACHE_FOLDER: ~/.cache/pip3
-
     steps:
       - uses: actions/checkout@v2
+
+      - run: |
+          echo "::set-env name=PLZ_OVERRIDES::cache.dir:$HOME/.cache/please"
+          echo "::set-env name=GOCACHE::$HOME/.cache/gocache"
+          echo "::set-env name=GOPATH::$HOME/.cache/gopath"
+          echo "::set-env name=YARN_CACHE_FOLDER::$HOME/.cache/yarn"
+          echo "::set-env name=PIP3_CACHE_FOLDER::$HOME/.cache/pip3"
 
       - run: env
 
@@ -31,12 +31,12 @@ jobs:
         with:
           python-version: '^3.7.0'
 
-      - name: Setup virtualenv
-        run: |
-          pip3 install --upgrade pip
-          pip3 install setuptools
-          pip3 install virtualenv
-          sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
+      # - name: Setup virtualenv
+      #   run: |
+      #     pip3 install --upgrade pip
+      #     pip3 install setuptools
+      #     pip3 install virtualenv
+      #     sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
 
       #   uses: actions/cache@v1
       #   with:
@@ -47,11 +47,11 @@ jobs:
       #       ${{ runner.os }}-build-
       #       ${{ runner.os }}-
 
-      - name: Build
-        run: ./pleasew build //...
+      # - name: Build
+      #   run: ./pleasew build //...
 
-      - name: Test
-        run: ./pleasew test //...
+      # - name: Test
+      #   run: ./pleasew test //...
 
-      - name: Debug
-        run: ls -alh ~/.cache
+      # - name: Debug
+      #   run: ls -alh ~/.cache
