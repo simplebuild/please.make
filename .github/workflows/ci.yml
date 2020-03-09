@@ -36,14 +36,10 @@ jobs:
           pip3 install virtualenv
           sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
 
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-build-${{ env.cache-name }}-
-      #       ${{ runner.os }}-build-
-      #       ${{ runner.os }}-
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache
+          key: ${{ runner.os }}-all
 
       - name: Build
         run: ./pleasew build //...
