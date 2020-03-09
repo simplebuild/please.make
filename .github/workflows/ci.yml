@@ -46,6 +46,3 @@ jobs:
 
       - name: Test
         run: ./pleasew test //...
-
-      - name: Debug
-        run: ls -alh ~/.cache
