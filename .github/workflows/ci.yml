@@ -15,10 +15,11 @@ jobs:
 
       - run: |
           echo "::set-env name=PLZ_OVERRIDES::cache.dir:$HOME/.cache/please"
-          echo "::set-env name=GOCACHE::$HOME/.cache/gocache"
-          echo "::set-env name=GOPATH::$HOME/.cache/gopath"
-          echo "::set-env name=YARN_CACHE_FOLDER::$HOME/.cache/yarn"
-          echo "::set-env name=PIP3_CACHE_FOLDER::$HOME/.cache/pip3"
+
+      # echo "::set-env name=GOCACHE::$HOME/.cache/gocache"
+      # echo "::set-env name=GOPATH::$HOME/.cache/gopath"
+      # echo "::set-env name=YARN_CACHE_FOLDER::$HOME/.cache/yarn"
+      # echo "::set-env name=PIP3_CACHE_FOLDER::$HOME/.cache/pip3"
 
       # Using default versions of Java, Go and Node, override if needed
       # - uses: actions/setup-java@v1.3.0
@@ -36,10 +37,16 @@ jobs:
           pip3 install virtualenv
           sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
 
+      - name: Get current timestamp
+        id: timestamp
+        run: echo "::set-output name=timestamp::$(date +'%s')"
+
       - uses: actions/cache@v1
         with:
           path: ~/.cache
-          key: ${{ runner.os }}-all
+          key: ${{ runner.os }}-${{ steps.timestamp.outputs.timestamp }}
+          restore-keys:
+            - ${{ runner.os }}-
 
       - name: Build
         run: ./pleasew build //...
