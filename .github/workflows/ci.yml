@@ -45,8 +45,8 @@ jobs:
         with:
           path: ~/.cache
           key: ${{ runner.os }}-${{ steps.timestamp.outputs.timestamp }}
-          restore-keys: |
-            ${{ runner.os }}-
+          # restore-keys: |
+          #   ${{ runner.os }}-
 
       - name: Build
         run: ./pleasew build //...
