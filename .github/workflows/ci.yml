@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: |
+          echo "::set-env name=PLZ_OVERRIDES::cache.dir:$HOME/.cache/please"
+
+        # Not caching the packages below as the time to pull from npm, pip, etc. is
+        # faster than pulling and unzipping the cache and then zipping and sending it back.
+
+          # echo "::set-env name=GOCACHE::$HOME/.cache/gocache"
+          # echo "::set-env name=GOPATH::$HOME/.cache/gopath"
+          # echo "::set-env name=YARN_CACHE_FOLDER::$HOME/.cache/yarn"
+          # echo "::set-env name=PIP3_CACHE_FOLDER::$HOME/.cache/pip3"
+
+      # Using the default versions of Java, Go and Node, override if needed
+      # - uses: actions/setup-java@v1.3.0
+      # - uses: actions/setup-go@v1.0.0
+      # - uses: actions/setup-node@v1.1.0
+
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '^3.7.0'
+
+      - name: Setup virtualenv
+        run: |
+          pip3 install --upgrade pip
+          pip3 install setuptools
+          pip3 install virtualenv
+          sudo ln -s $(which virtualenv) /usr/local/bin/virtualenv
+
+      - name: Get current timestamp
+        id: timestamp
+        run: echo "::set-output name=timestamp::$(date +'%s')"
+
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache
+          key: ${{ runner.os }}-${{ steps.timestamp.outputs.timestamp }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Build
+        run: ./pleasew build //...
+
+      - name: Test
+        run: ./pleasew test //...
