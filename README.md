@@ -7,7 +7,7 @@ Currently supported: Python, Golang, Web/Nodejs, Java, gRPC, Docker
 Motivation
 ==========
 
-The monorepo build tools like [Bazel](https://github.com/bazelbuild/bazel), [Buck](https://github.com/facebook/buck), [Pants](https://github.com/pantsbuild/pants), [Please](https://github.com/thought-machine/please) give you fast, reproducible, incremental builds. However, they're not so friendly to IDEs or the tools we get used to, like virtualenv/requirements.txt for Python, webpack for web apps or go.mod for Go. To address that, please.make provides a minimal orchestration layer to unify build/test commands across languages while leveraging the native tooling.
+The monorepo build tools like [Bazel](https://github.com/bazelbuild/bazel), [Buck](https://github.com/facebook/buck), [Pants](https://github.com/pantsbuild/pants), [Please](https://github.com/thought-machine/please) give you fast, reproducible, incremental builds. However, it might be a little bit challenging to adopt them as they tend to replace the tools we get used to, like virtualenv/requirements.txt for Python, webpack for web apps or go.mod for Go. To address that, please.make provides a minimal orchestration layer to unify build/test commands across languages while leveraging the existing ecosystem. Think of it as a more flexible Makefile. It's also an IDE friendly without additional plugins.
 
 Getting started
 ===============
@@ -128,7 +128,7 @@ For Python, please.make uses `grpcio-tools` package which should be listed in th
 
 For Go, please.make pulls `protoc` and `protoc-gen-go` from GitHub. The versions are currently pinned in the `.build_defs/make/make-go/BUILD` file.
 
-Once some .proto files are updated, the corresponding protobuf / gRPC targets should be re-run with `plz run` to re-generate the code.
+Once .proto files are updated, the corresponding protobuf / gRPC targets should be re-run with `plz run` to re-generate the code.
 
 Web
 ---
@@ -140,7 +140,7 @@ Docker
 
 The rule `make_docker_image` builds an image from a Dockerfile (alternative name/path might be provided). As a context, docker receives a tarball with supplied sources and artifacts from other rules.
 
-Build an image with `plz run <path-to-docker-target>` (will use default repository from .plzconfig and hash-based tag). To override, use `DOCKER_REPOSITORY=... DOCKER_TAG=... plz run <path-to-docker-target>`. Set `DOCKER_PUSH=1` to push the image once build is complete.
+Build an image with `plz run <path-to-docker-target>` (will use default repository from .plzconfig and hash-based tag). To override, use `DOCKER_REPOSITORY=... DOCKER_TAG=... plz run <path-to-docker-target>`. To push the image add `DOCKER_PUSH=1`.
 
 IDE Setup
 =========
