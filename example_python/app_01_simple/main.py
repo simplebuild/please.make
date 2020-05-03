@@ -1,4 +1,4 @@
-from example_python.core.sum import sum
+from example_python.core.math import sum
 
 from absl import app, flags
 

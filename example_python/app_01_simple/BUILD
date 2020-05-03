@@ -1,18 +1,18 @@
 package(default_visibility=['PUBLIC'])
 subinclude('//.build_defs/make')
 
+make_python_app_runner(
+    name='app_01_simple',
+    app=':app',
+    main='main.py'
+)
+
 make_python_app(
     name='app',
     srcs=['main.py'],
     deps=[
-        '//example_python/core'
+        '//example_python/core/math'
     ]
-)
-
-make_python_app_runner(
-    name='01_simple',
-    app=':app',
-    main='main.py'
 )
 
 make_python_test(

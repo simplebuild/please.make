@@ -1,6 +1,6 @@
 import unittest
 
-from example_python.core.sum import sum
+from .sum import sum
 
 class SumTest(unittest.TestCase):
 
