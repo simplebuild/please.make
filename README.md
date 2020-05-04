@@ -135,6 +135,11 @@ Web
 
 To be documented...
 
+Java
+----
+
+Java support is nice in all monorepo build tools, so please.make currently just re-uses original please rules, but maven/gradle support is being explored.
+
 Docker
 ------
 
@@ -145,4 +150,27 @@ Build an image with `plz run <path-to-docker-target>` (will use default reposito
 IDE Setup
 =========
 
-To be documented...
+VSCode
+------
+
+Python: Run `plz test` at least once to get the `venv` folder created, then specify the path to the venv folder in the VSCode settings. For convenience, `.vscode/settings.json` already does that. Also, there is an `.env` file that defines the `PYTHONPATH=.` to indicate the root level of imports.
+
+Go: If VSCode IntelliSense doesn't work well, open "example_go" separately as a root of workspace (to have go.mod/go.sum on the root level).
+
+Java: All maven jars get stored in `plz-out/gen/<jvm-root>/*.jar`. This path should be added to the classpath.
+
+IntelliJ IDEA
+-------------
+
+Open this project in IDEA as a simple folder (`File > Open` in IDEA, or `idea .` in terminal). Brew coffee, let it index the sources.
+
+Python: Run `plz test` at least once to get the `venv` folder created. Navigate to `File > Project Structure` (`⌘;`), then `Platform Settings > SDKs`, click `+` and choose `Python SDK`. In the dialog, select `Virtualenv Environment > Existing environment` and specify the path to the `example_python/venv/bin/python`. Check `Make available to all projects` and click `OK` to complete. Navigate to `Modules`, mark "example_python" folder as "Sources" and "venv" as "Excluded". Navigate to `Facets`, click `+`, choose `Python` and select the Python SDK created in the previous step.
+
+Go: Open any .go file and most likely IDEA suggest to enable `vgo` (go modules). If it didn't, navigate to `Preferences` (`⌘,`), search for `vgo` and enable it.
+
+Java: Run `plz test` at least once to pull 3rd party jars from maven. Choose JDK in the `Project Structure > Project` menu (`⌘;`), then navigate to `Modules > Dependencies`, click `+`, add `JARs or directories`, specify path to `plz-out/gen/example_jvm` (it has the jars pulled from maven).
+
+Web: Run `plz test` at least once to get the `node_modules` folder created. Go to `Project Structure (⌘;) > Modules`, mark "example_web" as "Sources" and "node_modules" as "Excluded".
+
+
+

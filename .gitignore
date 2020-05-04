@@ -3,5 +3,6 @@
 plz-out
 node_modules
 venv
+__pycache__
 .idea
 .vscode
