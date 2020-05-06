@@ -1,13 +1,13 @@
 # please.make ![CI](https://github.com/Anton-Rodionov/please.make/workflows/CI/badge.svg?branch=master)
 
-please.make is a minimalistic set of rules for the [please build system](https://github.com/thought-machine/please) that provides a lightweight glue layer on top of the native build tools that you'd normally use in a multi-repo setup (webpack, venv, gomod, etc.)
+**please.make** is a minimalistic set of rules for the [please build system](https://github.com/thought-machine/please) that provides a lightweight glue layer on top of the native build tools that you'd normally use in a multi-repo setup (webpack, venv, gomod, etc.)
 
-Currently supported: Python, Golang, Web/Nodejs, Java, gRPC, Docker
+Currently supported: Python, Golang, Web/Node.js, Java, gRPC, Docker
 
 Motivation
 ==========
 
-The monorepo build tools like [Bazel](https://github.com/bazelbuild/bazel), [Buck](https://github.com/facebook/buck), [Pants](https://github.com/pantsbuild/pants), [Please](https://github.com/thought-machine/please) give you fast, reproducible, incremental builds. However, it might be a little bit challenging to adopt them as they tend to replace the tools we get used to, like virtualenv/requirements.txt for Python, webpack for web apps or go.mod for Go. To address that, please.make provides a minimal orchestration layer to unify build/test commands across languages while leveraging the existing ecosystem. Think of it as a more flexible Makefile. It's also an IDE friendly without additional plugins.
+The monorepo build tools like [Bazel](https://github.com/bazelbuild/bazel), [Buck](https://github.com/facebook/buck), [Pants](https://github.com/pantsbuild/pants), [Please](https://github.com/thought-machine/please) give you fast, reproducible, incremental builds. However, it might be a little bit challenging to adopt them as they tend to replace the tools we get used to, like virtualenv/requirements.txt for Python, webpack for web apps or go.mod for Go. To address that, **please.make** provides a minimal orchestration layer to unify build/test commands across languages while leveraging the existing ecosystem. Think of it as a more flexible Makefile. It's also an IDE friendly without additional plugins.
 
 Getting started
 ===============
@@ -49,6 +49,11 @@ A few examples:
 > Build finished; total time 90ms, incrementality 50.0%. Outputs:
 > //example_web/apps/bookstore:bookstore:
 >   plz-out/gen/example_web/apps/bookstore/dist
+
+# example running local development server
+./pleasew run example_web/apps/bookstore:devserver
+> listening on localhost:3000
+> DONE Compiled successfully in 1170ms
 
 # example packaging nginx with web app into docker
 ./pleasew run example_web/apps/bookstore:docker
@@ -124,21 +129,31 @@ Protobuf / gRPC
 
 Every ecosystem is unique, so there's no a single rule. Currently, only Python and Go are supported with `make_python_proto()` and `make_go_proto()` rules.
 
-For Python, please.make uses `grpcio-tools` package which should be listed in the requirements.txt.
+For Python, **please.make** uses `grpcio-tools` package which should be listed in the requirements.txt.
 
-For Go, please.make pulls `protoc` and `protoc-gen-go` from GitHub. The versions are currently pinned in the `.build_defs/make/make-go/BUILD` file.
+For Go, **please.make** pulls `protoc` and `protoc-gen-go` from GitHub. The versions are currently pinned in the `.build_defs/make/make-go/BUILD` file.
 
 Once .proto files are updated, the corresponding protobuf / gRPC targets should be re-run with `plz run` to re-generate the code.
 
 Web
 ---
 
-To be documented...
+**please.make** requires `node` to be installed separately.
+
+Initialize `package.json` as you would for any other project. To add new dependency simply use `yarn add` command.
+
+**please.make** is agnostic of tooling used to build/run/test web projects. Any custom toolchain could be added to the project by using `make_web_toolchain` rule, which only requires `build.js`, `start.js` and `test.js` scripts to be defined (see `example_web/toolchain`).
+
+Use `make_web_component` rule to define sharable web components and `make_web_app` rule to define web application.
+
+To enable local web development server use `make_web_app_devserver` rule.
+
+Test units are defined using `make_web_test` rule.
 
 Java
 ----
 
-Java support is nice in all monorepo build tools, so please.make currently just re-uses original please rules, but maven/gradle support is being explored.
+Java support is nice in all monorepo build tools, so **please.make** currently just re-uses original please rules, but maven/gradle support is being explored.
 
 Docker
 ------
