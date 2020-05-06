@@ -7,4 +7,4 @@ python-vendor-deps = //example_python:vendor
 web-vendor-deps = //example_web:vendor
 web-toolchain = //example_web/toolchain:default
 
-docker-repository = docker.pkg.github.com/anton-rodionov/please.make
+docker-repository = docker.pkg.github.com/simplebuild/please.make

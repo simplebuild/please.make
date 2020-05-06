@@ -1,4 +1,4 @@
-# please.make ![CI](https://github.com/Anton-Rodionov/please.make/workflows/CI/badge.svg?branch=master)
+# please.make ![CI](https://github.com/simplebuild/please.make/workflows/CI/badge.svg?branch=master)
 
 please.make is a minimalistic set of rules for the [please build system](https://github.com/thought-machine/please) that provides a lightweight glue layer on top of the native build tools that you'd normally use in a multi-repo setup (webpack, venv, gomod, etc.)
 
@@ -72,7 +72,7 @@ Python
 
 Please.make requires `python3` and `virtualenv` to be installed separately.
 
-Build produces a `dist` folder that contains all *.py files of the project and its dependencies, and `requirements.txt` (rules: `make_python_app()` and `make_python_library()`).
+Build produces a `dist` folder that contains all *.py files of the project and its dependencies, and `requirements.txt` (rules: `make_python_app` and `make_python_library`).
 
 ```sh
 plz-out/gen/example_python
@@ -88,7 +88,7 @@ plz-out/gen/example_python
 │   │       └── requirements.txt
 ```
 
-The `dist` folder then can be run with local Python interpreter or packaged into docker (rules: `make_python_app_runner()`, `make_docker_image()`).
+The `dist` folder then can be run with local Python interpreter or packaged into docker (rules: `make_python_app_runner`, `make_docker_image`).
 
 On every `plz run <python-target>` or `plz test <python-target>`, please.make syncs venv from requirements.txt and then freezes requirements.txt (with *"venv/bin/pip3 freeze"*).
 
@@ -111,7 +111,7 @@ Please.make requires `go` to be installed separately.
 
 Since Go is monorepo-friendly, the go rules are very lightweight.
 
-Keep the same code structure, use go cli as usual, track dependencies with `go.mod` and `go.sum`, just seed the `BUILD` files with simple `make_go_package()`, `make_go_binary()` and `make_go_test()` rules.
+Keep the same code structure, use go cli as usual, track dependencies with `go.mod` and `go.sum`, just seed the `BUILD` files with simple `make_go_package`, `make_go_binary` and `make_go_test` rules.
 
 No need to specify dependencies as please.make analyzes all imports and appends them to the dependency graph for you.
 
@@ -122,7 +122,7 @@ Build is isolated, but `GOCACHE` and `GOPATH` variables are inherited to leverag
 Protobuf / gRPC
 ---------------
 
-Every ecosystem is unique, so there's no a single rule. Currently, only Python and Go are supported with `make_python_proto()` and `make_go_proto()` rules.
+Every ecosystem is unique, so there's no a single rule. Currently, Protobuf / gRPC is only supported for Python and Go with `make_python_proto` and `make_go_proto` rules.
 
 For Python, please.make uses `grpcio-tools` package which should be listed in the requirements.txt.
 
@@ -143,7 +143,7 @@ Java support is nice in all monorepo build tools, so please.make currently just 
 Docker
 ------
 
-The rule `make_docker_image` builds an image from a Dockerfile (alternative name/path might be provided). As a context, docker receives a tarball with supplied sources and artifacts from other rules.
+The rule `make_docker_image` builds an image from a Dockerfile. As a context, docker receives a tarball with supplied sources and artifacts from other rules.
 
 Build an image with `plz run <path-to-docker-target>` (will use default repository from .plzconfig and hash-based tag). To override, use `DOCKER_REPOSITORY=... DOCKER_TAG=... plz run <path-to-docker-target>`. To push the image add `DOCKER_PUSH=1`.
 
@@ -162,13 +162,13 @@ Java: All maven jars get stored in `plz-out/gen/<jvm-root>/*.jar`. This path sho
 IntelliJ IDEA
 -------------
 
-Open this project in IDEA as a simple folder (`File > Open` in IDEA, or `idea .` in terminal). Brew coffee, let it index the sources.
+Open this project in IDEA as a simple folder (`File > Open` in IDEA, or `idea .` in terminal).
 
-Python: Run `plz test` at least once to get the `venv` folder created. Navigate to `File > Project Structure` (`⌘;`), then `Platform Settings > SDKs`, click `+` and choose `Python SDK`. In the dialog, select `Virtualenv Environment > Existing environment` and specify the path to the `example_python/venv/bin/python`. Check `Make available to all projects` and click `OK` to complete. Navigate to `Modules`, mark "example_python" folder as "Sources" and "venv" as "Excluded". Navigate to `Facets`, click `+`, choose `Python` and select the Python SDK created in the previous step.
+Python: Run `plz test` at least once to get the `venv` folder created. Navigate to `Project Structure (⌘;) > Platform Settings > SDKs`, click `+` and choose `Python SDK`. In the dialog, select `Virtualenv Environment > Existing environment` and specify the path to the `example_python/venv/bin/python`. Check `Make available to all projects` and click `OK` to complete. Navigate to `Modules`, mark "example_python" folder as "Sources" and "venv" as "Excluded". Navigate to `Facets`, click `+`, choose `Python` and select the Python SDK created in the previous step.
 
-Go: Open any .go file and most likely IDEA suggest to enable `vgo` (go modules). If it didn't, navigate to `Preferences` (`⌘,`), search for `vgo` and enable it.
+Go: Open any .go file and most likely IDEA would suggest to enable `vgo` (go modules). If it didn't, navigate to `Preferences` (`⌘,`), search for `vgo` and enable it.
 
-Java: Run `plz test` at least once to pull 3rd party jars from maven. Choose JDK in the `Project Structure > Project` menu (`⌘;`), then navigate to `Modules > Dependencies`, click `+`, add `JARs or directories`, specify path to `plz-out/gen/example_jvm` (it has the jars pulled from maven).
+Java: Run `plz test` at least once to pull 3rd party jars from maven. Navigate to `Project Structure (⌘;) > Project` menu and choose `JDK`, then navigate to `Modules > Dependencies`, click `+`, add `JARs or directories`, specify path to `plz-out/gen/example_jvm` (it has the jars pulled from maven).
 
 Web: Run `plz test` at least once to get the `node_modules` folder created. Go to `Project Structure (⌘;) > Modules`, mark "example_web" as "Sources" and "node_modules" as "Excluded".
 
