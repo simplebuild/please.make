@@ -1,13 +1,13 @@
 # please.make ![CI](https://github.com/simplebuild/please.make/workflows/CI/badge.svg?branch=master)
 
-**please.make** is a minimalistic set of rules for the [please build system](https://github.com/thought-machine/please) that provides a lightweight glue layer on top of the native build tools that you'd normally use in a multi-repo setup (webpack, venv, gomod, etc.)
+**please.make** is a minimalistic set of rules for the [please build system](https://github.com/thought-machine/please) that allows managing hybrid backend/frontend monorepos with the tools commonly used in a multi-repo setup (webpack, virtualenv, go.mod, etc.)
 
 Currently supported: Python, Golang, Web/Node.js, Java, gRPC, Docker
 
 Motivation
 ==========
 
-The monorepo build tools like [Bazel](https://github.com/bazelbuild/bazel), [Buck](https://github.com/facebook/buck), [Pants](https://github.com/pantsbuild/pants), [Please](https://github.com/thought-machine/please) give you fast, reproducible, incremental builds. However, it might be a little bit challenging to adopt them as they tend to replace the tools we get used to, like virtualenv/requirements.txt for Python, webpack for web apps or go.mod for Go. To address that, **please.make** provides a minimal orchestration layer to unify build/test commands across languages while leveraging the existing ecosystem. Think of it as a more flexible Makefile. It's also an IDE friendly without additional plugins.
+The monorepo build tools like [Bazel](https://github.com/bazelbuild/bazel), [Buck](https://github.com/facebook/buck), [Pants](https://github.com/pantsbuild/pants), [Please](https://github.com/thought-machine/please) give you fast, reproducible, incremental builds. However, it might be a bit challenging or expensive to adopt them as they tend to replace the tools we get used to, like virtualenv/requirements.txt for Python, webpack for web apps or go.mod for Go. To address that, **please.make** provides a minimal orchestration layer to unify build/test commands across languages while leveraging the existing ecosystem. Think of it as a more flexible Makefile. It's also an IDE friendly without additional plugins.
 
 Getting started
 ===============
