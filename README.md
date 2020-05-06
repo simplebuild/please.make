@@ -75,7 +75,7 @@ Concept
 Python
 ------
 
-Please.make requires `python3` and `virtualenv` to be installed separately.
+**please.make** requires `python3` and `virtualenv` to be installed separately.
 
 Build produces a `dist` folder that contains all *.py files of the project and its dependencies, and `requirements.txt` (rules: `make_python_app()` and `make_python_library()`).
 
@@ -95,7 +95,7 @@ plz-out/gen/example_python
 
 The `dist` folder then can be run with local Python interpreter or packaged into docker (rules: `make_python_app_runner()`, `make_docker_image()`).
 
-On every `plz run <python-target>` or `plz test <python-target>`, please.make syncs venv from requirements.txt and then freezes requirements.txt (with *"venv/bin/pip3 freeze"*).
+On every `plz run <python-target>` or `plz test <python-target>`, **please.make** syncs venv from requirements.txt and then freezes requirements.txt (with *"venv/bin/pip3 freeze"*).
 
 To add a new 3rd party dependency:
 1. add `name` or `name==version` into `requirements.txt`, or run `./venv/bin/pip3 install name(==version)`
@@ -107,12 +107,12 @@ To remove a dependency:
 
 Ideally we should be able to uninstall dependencies by simply removing them from the requirements.txt, but this is not supported yet.
 
-While every build/test command is fully isolated and executed in a sandbox, please.make respects the `PIP3_CACHE_FOLDER` environment variable to leverage the system cache.
+While every build/test command is fully isolated and executed in a sandbox, **please.make** respects the `PIP3_CACHE_FOLDER` environment variable to leverage the system cache.
 
 Go
 --
 
-Please.make requires `go` to be installed separately.
+**please.make** requires `go` to be installed separately.
 
 Since Go is monorepo-friendly, the go rules are very lightweight.
 
