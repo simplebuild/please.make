@@ -5,7 +5,7 @@ make_web_app(
     name = 'bookstore',
     srcs = glob(['src/*.tsx'], ['src/*.test.tsx']),
     deps = [
-        '//example_web/core/header'
+        '//example_web/core/book'
     ]
 )
 

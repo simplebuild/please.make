@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "baseUrl": ".",
     "lib": [
       "dom",
       "dom.iterable",
@@ -18,7 +17,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "~apps/*": ["apps/*"],
+      "~core/*": ["core/*"]
+    }
   },
   "include": [
     "apps",

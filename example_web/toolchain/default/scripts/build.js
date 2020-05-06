@@ -1,8 +1,5 @@
 'use strict';
 
-process.env.BABEL_ENV = 'production';
-process.env.NODE_ENV = 'production';
-
 const path = require('path');
 const chalk = require('chalk');
 const webpack = require('webpack');
@@ -12,7 +9,7 @@ const configFactory = require('../config/webpack.config');
 
 function build(appPath) {
   const resolvedPath = path.resolve(appPath);
-  const config = configFactory(resolvedPath);
+  const config = configFactory('production', resolvedPath);
   const compiler = webpack(config);
 
   return new Promise((resolve, reject) => {
