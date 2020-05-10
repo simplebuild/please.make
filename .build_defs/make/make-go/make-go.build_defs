@@ -92,17 +92,22 @@ def make_go_test(name:str=(basename(package_name())+'-test'), deps:list=[]):
 
     return build_rule(
         name = name,
-        test_cmd = f'$TEST -test.v | $(out_location {junit_tool}) | tee $RESULTS_FILE',
+        test_cmd = ' && '.join([
+            'source $TEST/.test_env',
+            '$TEST/$NAME -test.v | $TOOLS_JUNIT | tee $RESULTS_FILE'
+        ]),
         cmd = ' && '.join([
+            'mkdir -p $OUTS',
+            'echo "export TOOLS_JUNIT=$TOOLS_JUNIT" >> $OUTS/.test_env',
             'pushd $PKG && HOME=$(eval echo ~$(whoami)) $TOOLS_GO test -c -o $NAME . && popd',
-            'mv $PKG/$NAME $OUTS'
+            'mv $PKG/$NAME $OUTS/'
         ]),
         tools = {
             'go': ['go'],
             'junit': [junit_tool],
         },
         pass_env = ['GOCACHE', 'GOPATH'],
-        outs = [name],
+        outs = [f'{name}.testpack'],
         deps = deps + [':' + GO_PACKAGE_TARGET] + [vendor_deps],
         needs_transitive_deps = True,
         binary = True,

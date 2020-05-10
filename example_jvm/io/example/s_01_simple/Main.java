@@ -1,6 +1,6 @@
 package io.example.s_01_simple;
 
-import io.example.core.sum.Sum;
+import io.example.core.math.Sum;
 
 public class Main {
     public static void main(String[] args) {

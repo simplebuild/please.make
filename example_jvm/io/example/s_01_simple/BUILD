@@ -5,7 +5,7 @@ make_java_binary(
     name = 's_01_simple',
     srcs = glob(['*.java']),
     main_class = 'io.example.s_01_simple.Main',
-    deps = ['//example_jvm/io/example/core/sum']
+    deps = ['//example_jvm/io/example/core/math']
 )
 
 make_docker_image(

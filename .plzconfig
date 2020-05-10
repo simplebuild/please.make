@@ -1,10 +1,19 @@
 [please]
-version = 14.1.3
+version = 14.4.2
 
 [buildconfig]
+### go
 go-vendor-deps = //example_go:vendor
+go-protoc-version = 3.11.4
+go-protoc-gen-go-version = v1.4.1
+go-junit-report-version = v0.9.1
+
+### python
 python-vendor-deps = //example_python:vendor
+
+### web
 web-vendor-deps = //example_web:vendor
 web-toolchain = //example_web/toolchain:default
 
+### docker
 docker-repository = docker.pkg.github.com/simplebuild/please.make
