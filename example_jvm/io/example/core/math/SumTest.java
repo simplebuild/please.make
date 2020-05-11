@@ -1,4 +1,4 @@
-package io.example.core.sum;
+package io.example.core.math;
 
 import org.junit.Test;
 

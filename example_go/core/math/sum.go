@@ -1,4 +1,4 @@
-package sum
+package math
 
 // Sum up two numbers
 func Sum(a int, b int) int {

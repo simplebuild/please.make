@@ -1,4 +1,4 @@
-package sum
+package math
 
 import (
 	"testing"

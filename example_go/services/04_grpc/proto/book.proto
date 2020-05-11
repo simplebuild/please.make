@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "proto";
+option go_package = "example_go/services/04_grpc/proto";
 
 message Empty {}
 

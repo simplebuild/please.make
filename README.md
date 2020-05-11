@@ -131,7 +131,7 @@ Every ecosystem is unique, so there's no a single rule. Currently, Protobuf / gR
 
 For Python, **please.make** uses `grpcio-tools` package which should be listed in the requirements.txt.
 
-For Go, **please.make** pulls `protoc` and `protoc-gen-go` from GitHub. The versions are currently pinned in the `.build_defs/make/make-go/BUILD` file.
+For Go, **please.make** pulls `protoc` and `protoc-gen-go` from GitHub. The versions are pinned in the `.plzconfig` file.
 
 Once .proto files are updated, the corresponding protobuf / gRPC targets should be re-run with `plz run` to re-generate the code.
 
