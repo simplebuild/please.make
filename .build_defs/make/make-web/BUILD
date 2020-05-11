@@ -5,4 +5,4 @@ filegroup(name='make-web', srcs=[
 ])
 
 subinclude('//.build_defs/make/make-web')
-system_make_yarn(name='yarn', version='1.17.3')
+system_make_yarn(name='yarn', version=check_config(key='WEB_YARN_VERSION', example='1.22.4'))

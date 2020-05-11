@@ -14,6 +14,7 @@ python-vendor-deps = //example_python:vendor
 ### web
 web-vendor-deps = //example_web:vendor
 web-toolchain = //example_web/toolchain:default
+web-yarn-version = 1.22.4
 
 ### docker
 docker-repository = docker.pkg.github.com/simplebuild/please.make
