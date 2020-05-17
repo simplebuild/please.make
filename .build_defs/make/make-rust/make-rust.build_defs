@@ -47,7 +47,7 @@ def make_rust_pull_github_binary(name:str, repository:str, version:str):
 def make_rust_workspace(name:str='workspace'):
     return filegroup(
         name = name,
-        srcs = glob(['Cargo.lock', 'Cargo.toml'])
+        srcs = glob(['Cargo.lock'])
     )
 
 def make_rust_package(srcs:list=[], deps:list=[], resources:list=[]):
@@ -82,15 +82,45 @@ def make_rust_binary(name:str=(basename(package_name())), deps:list=[]):
         name = name,
         building_description = 'Compiling rust...',
         cmd = ' && '.join([
-            f'export CARGO_TARGET_DIR=$(git rev-parse --show-toplevel)/{rust_root}',
-            f'pushd $PKG && HOME=$(eval echo ~$(whoami)) $TOOLS_CARGO build && popd',
-            f'cp $CARGO_TARGET_DIR/target/debug/$NAME $OUTS' # TODO: specify debug/release
+            f'export CARGO_TARGET_DIR=$(git rev-parse --show-toplevel)/{rust_root}/target',
+            f'pushd $PKG && HOME=$(eval echo ~$(whoami)) $TOOLS_CARGO build --release && popd',
+            f'cp $CARGO_TARGET_DIR/release/$NAME $OUTS'
         ]),
         tools = {
             'cargo': ['~/.cargo/bin/cargo']
         },
         outs = [name],
         binary = True,
+        deps = deps + [':' + RUST_PACKAGE_TARGET] + [rust_workspace],
+        needs_transitive_deps = True
+    )
+
+def make_rust_test(name:str=(basename(package_name())+'-test'), deps:list=[]):
+    rust_workspace = check_config(key='RUST_WORKSPACE', example='//example_rust:workspace')
+    rust_root, _ = decompose(rust_workspace)
+
+    return build_rule(
+        name = name,
+        building_description = 'Compiling rust tests...',
+        test_cmd = ' && '.join([
+            'source $TEST/.test_env',
+            '$TEST/$NAME -Z unstable-options --format json | $TOOLS_CARGO2JUNIT | tee $RESULTS_FILE'
+        ]),
+        cmd = ' && '.join([
+            f'mkdir -p $OUTS',
+            f'echo "export TOOLS_CARGO2JUNIT=$TOOLS_CARGO2JUNIT" >> $OUTS/.test_env',
+            f'export CARGO_TARGET_DIR=$(git rev-parse --show-toplevel)/{rust_root}/target',
+            f'pushd $PKG && HOME=$(eval echo ~$(whoami)) $TOOLS_CARGO test --no-run --release --message-format json | tee $TMP_DIR/meta.json && popd',
+            f'cp $(cat $TMP_DIR/meta.json | $TOOLS_JQ -r "select(.profile.test==true) | .executable") $OUTS/$NAME'
+        ]),
+        tools = {
+            'cargo': ['~/.cargo/bin/cargo'],
+            'jq': ['//.build_defs/make/make-rust:jq'],
+            'cargo2junit': ['//.build_defs/make/make-rust:cargo2junit']
+        },
+        outs = [f'{name}.testpack'],
+        binary = True,
+        test = True,
         deps = deps + [':' + RUST_PACKAGE_TARGET] + [rust_workspace],
         needs_transitive_deps = True
     )
