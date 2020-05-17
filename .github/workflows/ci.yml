@@ -24,10 +24,11 @@ jobs:
           # echo "::set-env name=YARN_CACHE_FOLDER::$HOME/.cache/yarn"
           # echo "::set-env name=PIP3_CACHE_FOLDER::$HOME/.cache/pip3"
 
-      # Using the default versions of Java, Go and Node, override if needed
+      # Using the default versions of Java, Go, Node and Cargo, override if needed
       # - uses: actions/setup-java@v1.3.0
       # - uses: actions/setup-go@v1.0.0
       # - uses: actions/setup-node@v1.1.0
+      # - uses: actions-rs/toolchain@v1
 
       - uses: actions/setup-python@v1
         with:

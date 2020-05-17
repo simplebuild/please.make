@@ -16,5 +16,11 @@ web-vendor-deps = //example_web:vendor
 web-toolchain = //example_web/toolchain:default
 web-yarn-version = 1.22.4
 
+### rust
+rust-workspace = //example_rust:workspace
+rust-rq-version = v1.0.2
+rust-jq-version = 1.6
+rust-cargo-2-junit-version = 0.1.5
+
 ### docker
 docker-repository = docker.pkg.github.com/simplebuild/please.make
