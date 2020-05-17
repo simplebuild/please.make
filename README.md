@@ -1,8 +1,9 @@
 # please.make ![CI](https://github.com/simplebuild/please.make/workflows/CI/badge.svg?branch=master)
 
-**please.make** is a minimalistic set of rules for the [please build system](https://github.com/thought-machine/please) that allows managing hybrid backend/frontend monorepos with the tools commonly used in a multi-repo setup (webpack, virtualenv, go.mod, etc.)
+**please.make** is a minimalistic set of rules for the [please build system](https://github.com/thought-machine/please) that allows managing hybrid backend/frontend monorepos with the tools commonly used in a multi-repo setup (webpack, virtualenv, go.mod, cargo, etc.)
 
 Currently supported: Python, Golang, Web/Node.js, Java, gRPC, Docker
+Experimental: Rust/Cargo
 
 Motivation
 ==========
