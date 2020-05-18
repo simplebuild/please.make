@@ -1,4 +1,4 @@
-GO_PACKAGE_TARGET = '_go_package#go_package'
+GO_PACKAGE_TARGET = 'package'
 
 def system_make_protoc_tool(name:str, version:str):
     protoc_archive_target = f'_{name}#archive'

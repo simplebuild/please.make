@@ -1,4 +1,4 @@
-RUST_PACKAGE_TARGET = '_rust_package#rust_package'
+RUST_PACKAGE_TARGET = 'package'
 
 def system_make_jq_tool(name:str, version:str):
     return build_rule(
@@ -72,6 +72,18 @@ def make_rust_package(srcs:list=[], deps:list=[], resources:list=[]):
         name = RUST_PACKAGE_TARGET,
         srcs = srcs + resources,
         deps = deps + [cargo_deps]
+    )
+
+def make_rust_sources(name:str=(basename(package_name())+'-sources')):
+    rust_workspace = check_config(key='RUST_WORKSPACE', example='//example_rust:workspace')
+    rust_root, _ = decompose(rust_workspace)
+
+    return build_rule(
+        name = name,
+        cmd = f'mkdir -p $OUT && mv {rust_root} $OUT',
+        outs = ['sources'],
+        deps = [':' + RUST_PACKAGE_TARGET] + [rust_workspace],
+        needs_transitive_deps = True,
     )
 
 def make_rust_binary(name:str=(basename(package_name())), deps:list=[]):
