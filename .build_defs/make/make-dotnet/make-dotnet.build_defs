@@ -1,0 +1,48 @@
+DOT_NET_PROJECT_TARGET = 'project'
+
+def make_dotnet_project(srcs:list=[], deps:list=[], resources:list=[]):
+    if not srcs:
+        srcs = glob(['**/*.cs', '*.csproj'], exclude=['obj/**', 'bin/**'])
+
+    project_deps = build_rule(
+        name = DOT_NET_PROJECT_TARGET,
+        tag = 'project_deps',
+        srcs = glob(['*.csproj']),
+        cmd = 'cd $PKG && $TOOLS_DOTNET list reference | grep .csproj | sed "s|\\\\\|/|g" | xargs dirname || true',
+        tools = {
+            'dotnet': ['dotnet'],
+        },
+        post_build = lambda rule_name, output: [
+            add_dep(DOT_NET_PROJECT_TARGET, '//' + join_path(package_name(), line) + ':' + DOT_NET_PROJECT_TARGET) for line in output if line
+        ]
+    )
+
+    return filegroup(
+        name = DOT_NET_PROJECT_TARGET,
+        srcs = srcs + resources,
+        deps = deps + [project_deps]
+    )
+
+def make_dotnet_app(name:str, deps:list=[]):
+    return build_rule(
+        name = name,
+        building_description = 'Compiling dotnet...',
+        cmd = ' && '.join([
+            f'cd $PKG && $TOOLS_DOTNET publish -c Release -o $OUT'
+        ]),
+        tools = {
+            'dotnet': ['dotnet'],
+        },
+        outs = ['dist'],
+        binary = True,
+        deps = deps + [':' + DOT_NET_PROJECT_TARGET],
+        needs_transitive_deps = True
+    )
+
+
+def make_dotnet_app_runner(name:str=(basename(package_name())), app:str, deps:list=[]):
+    return sh_cmd(
+        name = name,
+        cmd = f'dotnet $(out_location {app})/$(basename $PKG).dll "\\\$@"',
+        deps = deps + [app],
+    )
