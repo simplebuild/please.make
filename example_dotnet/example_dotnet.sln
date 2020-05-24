@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26124.0
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "app_01", "app_01\app_01.csproj", "{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{AD620C0F-A5BF-43FE-B4E2-650B5506FF79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "math", "core\math\math.csproj", "{83553333-838C-407B-99B4-444B805B828F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "math.tests", "core\math.tests\math.tests.csproj", "{DAC5A275-A9E8-412A-BE70-961E4035CF38}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Debug|x64.Build.0 = Debug|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Debug|x86.Build.0 = Debug|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Release|x64.ActiveCfg = Release|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Release|x64.Build.0 = Release|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Release|x86.ActiveCfg = Release|Any CPU
+		{26C7424D-AEA7-4193-8DAA-89EBCDAA9C0B}.Release|x86.Build.0 = Release|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Debug|x64.Build.0 = Debug|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Debug|x86.Build.0 = Debug|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Release|x64.ActiveCfg = Release|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Release|x64.Build.0 = Release|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Release|x86.ActiveCfg = Release|Any CPU
+		{83553333-838C-407B-99B4-444B805B828F}.Release|x86.Build.0 = Release|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Debug|x64.Build.0 = Debug|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Debug|x86.Build.0 = Debug|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Release|x64.ActiveCfg = Release|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Release|x64.Build.0 = Release|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Release|x86.ActiveCfg = Release|Any CPU
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{83553333-838C-407B-99B4-444B805B828F} = {AD620C0F-A5BF-43FE-B4E2-650B5506FF79}
+		{DAC5A275-A9E8-412A-BE70-961E4035CF38} = {AD620C0F-A5BF-43FE-B4E2-650B5506FF79}
+	EndGlobalSection
+EndGlobal

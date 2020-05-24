@@ -1,0 +1,86 @@
+DOT_NET_PROJECT_TARGET = 'project'
+
+def make_dotnet_tool(name:str, version:str):
+    return build_rule(
+        name = name,
+        building_description = f'dotnet tool install {name}...',
+        binary = True,
+        cmd = ' && '.join([
+            f'$TOOLS_DOTNET tool install {name} --version {version} -g',
+            f'mv .dotnet/tools $OUTS',
+        ]),
+        outs = [name],
+        tools = {
+            'dotnet': ['dotnet']
+        }
+    )
+
+def make_dotnet_project(srcs:list=[], deps:list=[], resources:list=[]):
+    if not srcs:
+        srcs = glob(['**/*.cs', '*.csproj'], exclude=['obj/**', 'bin/**'])
+
+    project_deps = build_rule(
+        name = DOT_NET_PROJECT_TARGET,
+        tag = 'project_deps',
+        srcs = glob(['*.csproj']),
+        cmd = 'cd $PKG && $TOOLS_DOTNET list reference | grep .csproj | sed "s|\\\\\|/|g" | xargs dirname || true',
+        tools = {
+            'dotnet': ['dotnet'],
+        },
+        post_build = lambda rule_name, output: [
+            add_dep(DOT_NET_PROJECT_TARGET, '//' + join_path(package_name(), line) + ':' + DOT_NET_PROJECT_TARGET) for line in output if line
+        ]
+    )
+
+    return filegroup(
+        name = DOT_NET_PROJECT_TARGET,
+        srcs = srcs + resources,
+        deps = deps + [project_deps]
+    )
+
+def make_dotnet_app(name:str, deps:list=[]):
+    return build_rule(
+        name = name,
+        building_description = 'Compiling dotnet...',
+        cmd = ' && '.join([
+            f'cd $PKG && $TOOLS_DOTNET publish -c Release -o $OUT'
+        ]),
+        tools = {
+            'dotnet': ['dotnet'],
+        },
+        outs = ['dist'],
+        deps = deps + [':' + DOT_NET_PROJECT_TARGET],
+        needs_transitive_deps = True
+    )
+
+def make_dotnet_app_runner(name:str=(basename(package_name())), app:str, deps:list=[]):
+    return sh_cmd(
+        name = name,
+        cmd = f'dotnet $(out_location {app})/$(basename $PKG).dll "\\\$@"',
+        deps = deps + [app],
+    )
+
+def make_dotnet_test(name:str='test', deps:list=[]):
+    return build_rule(
+        name = name,
+        building_description = 'Compiling dotnet...',
+        test_cmd = ' && '.join([
+            'source $TEST/.test_env',
+            'dotnet vstest --logger:"trx;LogFileName=report.trx" --ResultsDirectory:TestResults $TEST/$(basename $PKG).dll',
+            '$TOOLS_TRX2JUNIT/trx2junit TestResults/report.trx',
+            'mv TestResults/report.xml $RESULTS_FILE'
+        ]),
+        cmd = ' && '.join([
+            'mkdir -p $OUTS',
+            'echo "export TOOLS_TRX2JUNIT=$TOOLS_TRX2JUNIT" >> $OUTS/.test_env',
+            'pushd $PKG && $TOOLS_DOTNET publish -c Release -o $OUT && popd'
+        ]),
+        tools = {
+            'dotnet': ['dotnet'],
+            'trx2junit': ['//.build_defs/make/make-dotnet:trx2junit']
+        },
+        test = True,
+        outs = [f'{name}.testpack'],
+        deps = deps + [':' + DOT_NET_PROJECT_TARGET],
+        needs_transitive_deps = True
+    )
