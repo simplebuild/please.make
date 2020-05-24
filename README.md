@@ -167,27 +167,29 @@ Build an image with `plz run <path-to-docker-target>` (will use default reposito
 IDE Setup
 =========
 
+Run `plz test` at least once to pull 3rd party dependencies (will create _venv_, _node_modules_, etc.)
+
 VSCode
 ------
 
-Python: Run `plz test` at least once to get the `venv` folder created, then specify the path to the venv folder in the VSCode settings. For convenience, `.vscode/settings.json` already does that. Also, there is an `.env` file that defines the `PYTHONPATH=.` to indicate the root level of imports.
+**Python**: Specify the path to the venv folder in the VSCode settings. For convenience, `.vscode/settings.json` already does that. Also, there is an `.env` file that defines the `PYTHONPATH=.` to indicate the root level of imports.
 
-Go: If VSCode IntelliSense doesn't work well, open "example_go" separately as a root of workspace (to have go.mod/go.sum on the root level).
+**Java**: All maven jars get stored in `plz-out/gen/<jvm-root>/*.jar`. This path should be added to the classpath.
 
-Java: All maven jars get stored in `plz-out/gen/<jvm-root>/*.jar`. This path should be added to the classpath.
+Other languages should work just fine.
+
+If VSCode IntelliSense still doesn't work, open "example_<lang>" separately as a root of workspace (VSCode might not be able to discover cargo, go.mod, etc. in a nested folder).
+
 
 IntelliJ IDEA
 -------------
 
 Open this project in IDEA as a simple folder (`File > Open` in IDEA, or `idea .` in terminal).
 
-Python: Run `plz test` at least once to get the `venv` folder created. Navigate to `Project Structure (⌘;) > Platform Settings > SDKs`, click `+` and choose `Python SDK`. In the dialog, select `Virtualenv Environment > Existing environment` and specify the path to the `example_python/venv/bin/python`. Check `Make available to all projects` and click `OK` to complete. Navigate to `Modules`, mark "example_python" folder as "Sources" and "venv" as "Excluded". Navigate to `Facets`, click `+`, choose `Python` and select the Python SDK created in the previous step.
+**Python**: Navigate to `Project Structure (⌘;) > Platform Settings > SDKs`, click `+` and choose `Python SDK`. In the dialog, select `Virtualenv Environment > Existing environment` and specify the path to the `example_python/venv/bin/python`. Check `Make available to all projects` and click `OK` to complete. Navigate to `Modules`, mark "example_python" folder as "Sources" and "venv" as "Excluded". Navigate to `Facets`, click `+`, choose `Python` and select the Python SDK created in the previous step.
 
-Go: Open any .go file and most likely IDEA would suggest to enable `vgo` (go modules). If it didn't, navigate to `Preferences` (`⌘,`), search for `vgo` and enable it.
+**Go**: Open any .go file and most likely IDEA would suggest to enable `vgo` (go modules). If it didn't, navigate to `Preferences` (`⌘,`), search for `vgo` and enable it.
 
-Java: Run `plz test` at least once to pull 3rd party jars from maven. Navigate to `Project Structure (⌘;) > Project` menu and choose `JDK`, then navigate to `Modules > Dependencies`, click `+`, add `JARs or directories`, specify path to `plz-out/gen/example_jvm` (it has the jars pulled from maven).
+**Java**: Navigate to `Project Structure (⌘;) > Project` menu and choose `JDK`, then navigate to `Modules > Dependencies`, click `+`, add `JARs or directories`, specify path to `plz-out/gen/example_jvm` (it has the jars pulled from maven).
 
-Web: Run `plz test` at least once to get the `node_modules` folder created. Go to `Project Structure (⌘;) > Modules`, mark "example_web" as "Sources" and "node_modules" as "Excluded".
-
-
-
+Other languages should work out of the box, but don't forget to open `Project Structure (⌘;) > Modules` and mark "example_<lang>" as "Sources".
