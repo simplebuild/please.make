@@ -4,12 +4,12 @@
 
 Currently supported: Python, Golang, Web/Node.js, Java, gRPC, Docker
 
-Experimental: Rust/Cargo
+Experimental: Rust/Cargo, .NET
 
 Motivation
 ==========
 
-The monorepo build tools like [Bazel](https://github.com/bazelbuild/bazel), [Buck](https://github.com/facebook/buck), [Pants](https://github.com/pantsbuild/pants), [Please](https://github.com/thought-machine/please) give you fast, reproducible, incremental builds. However, it might be a bit challenging or expensive to adopt them as they tend to replace the tools we get used to, like virtualenv/requirements.txt for Python, webpack for web apps or go.mod for Go. To address that, **please.make** provides a minimal orchestration layer to unify build/test commands across languages while leveraging the existing ecosystem. Think of it as a more flexible Makefile. It's also an IDE friendly without additional plugins.
+The monorepo build tools like [Bazel](https://github.com/bazelbuild/bazel), [Buck](https://github.com/facebook/buck), [Pants](https://github.com/pantsbuild/pants), [Please](https://github.com/thought-machine/please) give you fast, reproducible, incremental builds. However, it might be a bit challenging to adopt them as they tend to replace the tools we get used to, like virtualenv/requirements.txt for Python, webpack for web apps or go.mod for Go. To address that, **please.make** provides a minimal orchestration layer to unify build/test commands across languages while leveraging the existing ecosystem. Think of it as a more flexible Makefile. It's also an IDE friendly without additional plugins.
 
 Getting started
 ===============
