@@ -178,7 +178,7 @@ VSCode
 
 Other languages should work just fine.
 
-If VSCode IntelliSense still doesn't work, open "example_<lang>" separately as a root of workspace (VSCode might not be able to discover cargo, go.mod, etc. in a nested folder).
+If VSCode IntelliSense still doesn't work, open "example_[lang]" separately as a root of workspace (VSCode might not be able to discover cargo, go.mod, etc. in a nested folder).
 
 
 IntelliJ IDEA
@@ -192,4 +192,4 @@ Open this project in IDEA as a simple folder (`File > Open` in IDEA, or `idea .`
 
 **Java**: Navigate to `Project Structure (⌘;) > Project` menu and choose `JDK`, then navigate to `Modules > Dependencies`, click `+`, add `JARs or directories`, specify path to `plz-out/gen/example_jvm` (it has the jars pulled from maven).
 
-Other languages should work out of the box, but don't forget to open `Project Structure (⌘;) > Modules` and mark "example_<lang>" as "Sources".
+Other languages should work out of the box, but don't forget to open `Project Structure (⌘;) > Modules` and mark "example_[lang]" as "Sources".
