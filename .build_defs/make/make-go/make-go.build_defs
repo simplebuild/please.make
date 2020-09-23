@@ -50,13 +50,19 @@ def make_go_package(srcs:list=[], deps:list=[], resources:list=[]):
         name = GO_PACKAGE_TARGET,
         tag = 'transitive_deps',
         srcs = srcs,
-        cmd = 'cd $PKG && $TOOLS_GO list -f "{{join .Imports \\"\\n\\"}}" | '
-            + f'grep {go_root} || true',
+        cmd = ' && '.join([
+            'cd $PKG',
+            'export TMPDIR=.',
+            'export HOME=$(eval echo ~$(whoami))',
+            'MOD=$($TOOLS_GO list -m)',
+            '$TOOLS_GO list -f "{{join .Imports \\"\\n\\"}}" | grep $MOD | sed "s|$MOD||g" || true',
+        ]),
         tools = {
             'go': ['go']
         },
+        deps = [vendor_deps],
         post_build = lambda rule_name, output: [
-            add_dep(GO_PACKAGE_TARGET, '//' + line + ':' + GO_PACKAGE_TARGET) for line in output if line
+            add_dep(GO_PACKAGE_TARGET, '//' + go_root + line + ':' + GO_PACKAGE_TARGET) for line in output if line
         ]
     )
 
@@ -73,7 +79,7 @@ def make_go_binary(name:str=(basename(package_name())), deps:list=[]):
         name = name,
         building_description = 'Compiling go...',
         cmd = ' && '.join([
-            'pushd $PKG && HOME=$(eval echo ~$(whoami)) $TOOLS_GO build -o $NAME . && popd',
+            'pushd $PKG && TMPDIR=. HOME=$(eval echo ~$(whoami)) $TOOLS_GO build -o $NAME . && popd',
             'mv $PKG/$NAME $OUTS'
         ]),
         tools = {
@@ -99,7 +105,7 @@ def make_go_test(name:str=(basename(package_name())+'-test'), deps:list=[]):
         cmd = ' && '.join([
             'mkdir -p $OUTS',
             'echo "export TOOLS_JUNIT=$TOOLS_JUNIT" >> $OUTS/.test_env',
-            'pushd $PKG && HOME=$(eval echo ~$(whoami)) $TOOLS_GO test -c -o $NAME . && popd',
+            'pushd $PKG && TMPDIR=. HOME=$(eval echo ~$(whoami)) $TOOLS_GO test -c -o $NAME . && popd',
             'mv $PKG/$NAME $OUTS/'
         ]),
         tools = {
