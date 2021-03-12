@@ -17,7 +17,7 @@
     "jest": "^25.3.0",
     "jest-junit": "^10.0.0",
     "react": "^16.13.1",
-    "react-dev-utils": "^10.2.1",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.13.1",
     "webpack": "^4.42.1",
     "webpack-dev-server": "^3.10.3"
