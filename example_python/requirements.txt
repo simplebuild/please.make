@@ -1,7 +1,7 @@
 absl-py==0.8.0
 grpcio==1.25.0
 grpcio-tools==1.25.0
-Jinja2==2.10.1
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 protobuf==3.10.0
 six==1.12.0
